@@ -65,6 +65,7 @@ class SwaggerController extends BaseController
         $additionalConfigUrl = config('l5-swagger.additional_config_url');
         $validatorUrl = config('l5-swagger.validator_url');
         $title = config('l5-swagger.api.title');
+        $oauth2Callback = route('l5-swagger.oauth2_callback');
 
         if (config('l5-swagger.api.separated_doc')) {
             $group = explode('.', Request::route()->getName())[1];
@@ -74,6 +75,7 @@ class SwaggerController extends BaseController
             $additionalConfigUrl = config('l5-swagger.doc_groups.'.$group.'.additional_config_url', $additionalConfigUrl);
             $validatorUrl = config('l5-swagger.doc_groups.'.$group.'.validator_url', $validatorUrl);
             $title = config('l5-swagger.doc_groups.'.$group.'.api.title', $group.' - '.$title);
+            $oauth2Callback = config('l5-swagger.doc_groups.'.$group.'.routes.oauth2_callback', $oauth2Callback.'/'.$group);
         }
 
         // Need the / at the end to avoid CORS errors on Homestead systems.
@@ -85,6 +87,7 @@ class SwaggerController extends BaseController
                 'configUrl'          => $additionalConfigUrl,
                 'validatorUrl'       => $validatorUrl,
                 'title'              => $title,
+                'oauth2_callback'    => $oauth2Callback,
             ]),
             200
         );

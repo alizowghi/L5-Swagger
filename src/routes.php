@@ -25,13 +25,11 @@ if (config('l5-swagger.api.separated_doc')) {
             'uses' => '\L5Swagger\Http\Controllers\SwaggerController@api',
         ]);
 
-        if (config($configPrefix.'routes.oauth2_callback')) {
-            $router->get(config($configPrefix.'.routes.oauth2_callback'), [
-                'as' => 'l5-swagger.'.$groupName.'.oauth2_callback',
-                'middleware' => config($configPrefix.'.routes.middleware.oauth2_callback', config('l5-swagger.routes.middleware.oauth2_callback', [])),
-                'uses' => '\L5Swagger\Http\Controllers\SwaggerController@oauth2Callback',
-            ]);
-        }
+        $router->get(config($configPrefix.'.routes.oauth2_callback', config('l5-swagger.routes.oauth2_callback').'/'.$groupName), [
+            'as' => 'l5-swagger.'.$groupName.'.oauth2_callback',
+            'middleware' => config($configPrefix.'.routes.middleware.oauth2_callback', config('l5-swagger.routes.middleware.oauth2_callback', [])),
+            'uses' => '\L5Swagger\Http\Controllers\SwaggerController@oauth2Callback',
+        ]);
     }
 } else {
     $router->any(config('l5-swagger.routes.docs') . '/{jsonFile?}', [

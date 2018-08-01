@@ -79,7 +79,7 @@ window.onload = function() {
     operationsSorter: {!! isset($operationsSorter) ? '"' . $operationsSorter . '"' : 'null' !!},
     configUrl: {!! isset($additionalConfigUrl) ? '"' . $additionalConfigUrl . '"' : 'null' !!},
     validatorUrl: {!! isset($validatorUrl) ? '"' . $validatorUrl . '"' : 'null' !!},
-    oauth2RedirectUrl: "{{ route('l5-swagger.oauth2_callback') }}",
+    oauth2RedirectUrl: "{{ $oauth2_callback }}",
 
     presets: [
       SwaggerUIBundle.presets.apis,
