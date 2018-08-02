@@ -33,13 +33,15 @@ return [
         */
 
         'default' => [
-            /*
-            |--------------------------------------------------------------------------
-            | Edit to set the this group's title, will override global title
-            |--------------------------------------------------------------------------
-            */
+            'api' => [
+                /*
+                |--------------------------------------------------------------------------
+                | Edit to set the this group's title, will override global title
+                |--------------------------------------------------------------------------
+                */
 
-            'title' => 'Default L5 Swagger UI',
+                'title' => 'Default L5 Swagger UI',
+            ],
 
             'routes' => [
                 /*
