@@ -11,7 +11,7 @@ if (config('l5-swagger.api.separated_doc')) {
         $configPrefix = 'l5-swagger.doc_groups.'.$groupName;
 
         $router->any(
-            config($configPrefix.'.routes.docs', config('l5-swagger.routes.docs')) . '/{jsonFile?}',
+            config($configPrefix.'.routes.docs', config('l5-swagger.routes.docs').'/'.$groupName) . '/{jsonFile?}',
             [
                 'as' => 'l5-swagger.'.$groupName.'.docs',
                 'middleware' => config($configPrefix.'.routes.middleware.docs', config('l5-swagger.routes.middleware.docs', [])),

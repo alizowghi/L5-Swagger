@@ -33,32 +33,37 @@ class Generator
         $excludeDirs = config('l5-swagger.paths.excludes');
         $docsJson = config('l5-swagger.paths.docs_json', 'api-docs.json');
         $securityConfig = config('l5-swagger.security', []);
+        $basePath = config('l5-swagger.paths.base');
 
         if ($group) {
             $appDir = config('l5-swagger.doc_groups.'.$group.'.paths.annotations', $appDir);
             $docDir = config('l5-swagger.doc_groups.'.$group.'.paths.docs', $docDir);
             $constants = config('l5-swagger.doc_groups.'.$group.'.constants', $constants);
             $excludeDirs = config('l5-swagger.doc_groups.'.$group.'.paths.excludes', $excludeDirs);
-            $docsJson = config('l5-swagger.doc_groups.'.$group.'.paths.docs_json', $docsJson);
+            $docsJson = config('l5-swagger.doc_groups.'.$group.'.paths.docs_json', $group.'-'.$docsJson);
             $securityConfig = config('l5-swagger.doc_groups.'.$group.'.security', $securityConfig);
+            $basePath = config('l5-swagger.doc_groups.'.$group.'.paths.base', $basePath);
         }
 
         if (! File::exists($docDir) || is_writable($docDir)) {
-            // delete all existing documentation
-            if (File::exists($docDir)) {
-                File::deleteDirectory($docDir);
+            $filename = $docDir.'/'.$docsJson;
+
+            if (! File::exists($docDir)) {
+                File::makeDirectory($docDir);
+            }
+
+            // delete existing documentation
+            if (File::exists($filename)) {
+                File::deleteDirectory($filename);
             }
 
             self::defineConstants($constants);
-
-            File::makeDirectory($docDir);
             $swagger = \Swagger\scan($appDir, ['exclude' => $excludeDirs]);
 
             if (config('l5-swagger.paths.base') !== null) {
-                $swagger->basePath = config('l5-swagger.paths.base');
+                $swagger->basePath = $basePath;
             }
 
-            $filename = $docDir.'/'.$docsJson;
             $swagger->saveAs($filename);
 
             if (is_array($securityConfig) && ! empty($securityConfig)) {

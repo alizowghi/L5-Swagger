@@ -25,7 +25,7 @@ class SwaggerController extends BaseController
             $filePath = config('l5-swagger.doc_groups.'.$group.'.paths.doc', config('l5-swagger.paths.docs')) . '/' .
                 (!is_null($jsonFile) ? $jsonFile : config(
                     'l5-swagger.doc_groups.'.$group.'.paths.docs_json',
-                    config('l5-swagger.paths.docs_json', 'api-docs.json')
+                    $group.'-'.config('l5-swagger.paths.docs_json', 'api-docs.json')
                 ));
         } else {
             $filePath = config('l5-swagger.paths.docs') . '/' .
@@ -65,7 +65,7 @@ class SwaggerController extends BaseController
         $additionalConfigUrl = config('l5-swagger.additional_config_url');
         $validatorUrl = config('l5-swagger.validator_url');
         $title = config('l5-swagger.api.title');
-        $oauth2Callback = route('l5-swagger.oauth2_callback');
+        $oauth2CallbackRoute = 'l5-swagger.oauth2_callback';
 
         if (config('l5-swagger.api.separated_doc')) {
             $group = explode('.', Request::route()->getName())[1];
@@ -75,7 +75,7 @@ class SwaggerController extends BaseController
             $additionalConfigUrl = config('l5-swagger.doc_groups.'.$group.'.additional_config_url', $additionalConfigUrl);
             $validatorUrl = config('l5-swagger.doc_groups.'.$group.'.validator_url', $validatorUrl);
             $title = config('l5-swagger.doc_groups.'.$group.'.api.title', $group.' - '.$title);
-            $oauth2Callback = config('l5-swagger.doc_groups.'.$group.'.routes.oauth2_callback', $oauth2Callback.'/'.$group);
+            $oauth2CallbackRoute = 'l5-swagger.'.$group.'.oauth2_callback';
         }
 
         // Need the / at the end to avoid CORS errors on Homestead systems.
@@ -87,7 +87,7 @@ class SwaggerController extends BaseController
                 'configUrl'          => $additionalConfigUrl,
                 'validatorUrl'       => $validatorUrl,
                 'title'              => $title,
-                'oauth2_callback'    => $oauth2Callback,
+                'oauth2_callback'    => route($oauth2CallbackRoute),
             ]),
             200
         );
