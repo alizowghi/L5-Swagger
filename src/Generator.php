@@ -58,7 +58,7 @@ class Generator
             }
 
             self::defineConstants($constants);
-            if (version_compare(config('swagger-lume.swagger_version'), '3.0', '>=')) {
+            if (version_compare(config('l5-swagger.swagger_version'), '3.0', '>=')) {
                 $swagger = \OpenApi\scan($appDir, ['exclude' => $excludeDirs]);
             } else {
                 $swagger = \Swagger\scan($appDir, ['exclude' => $excludeDirs]);
